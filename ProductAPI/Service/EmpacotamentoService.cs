@@ -36,12 +36,12 @@ namespace ProductAPI.Service
                     };
 
                     var produtosParaEssaCaixa = produtosNaoEmbalados
-                        .Where(p => ProdutoCabeNaCaixa(p.Dimensoes, caixaDisponivel.Dimensoes))
+                        .Where(p => ProdutoCabeNaCaixa(p.Dimensao, caixaDisponivel.Dimensao))
                         .ToList();
 
                     foreach (var produto in produtosParaEssaCaixa)
                     {
-                        caixa.Produtos.Add(produto.ProdutoId);
+                        caixa.Produtos.Add(produto.ProdutoId.ToString());
                         produtosNaoEmbalados.Remove(produto);
                     }
 
@@ -58,7 +58,7 @@ namespace ProductAPI.Service
                         pedidoSaida.Caixas.Add(new Caixa
                         {
                             CaixaId = null,
-                            Produtos = new List<string> { produto.ProdutoId },
+                            Produtos = new List<string> { produto.ProdutoId.ToString() },
                             Observacao = "Produto não cabe em nenhuma caixa disponível."
                         });
                     }
@@ -70,10 +70,29 @@ namespace ProductAPI.Service
             return pedidosSaida;
         }
 
-        private bool ProdutoCabeNaCaixa(Dimensoes produto, Dimensoes caixa)
+        public async Task<List<Produto>> ListarProdutosAsync()
+        {
+            return await _repository.ListarProdutosAsync();
+        }
+
+        public async Task<List<Pedido>> ListarPedidosAsync()
+        {
+            return await _repository.ListarPedidosAsync();
+        }
+
+        public async Task InserirProdutoAsync(Produto produto)
+        {
+            await _repository.InserirProdutoAsync(produto);
+        }
+
+        public async Task InserirPedidoAsync(Pedido pedido)
+        {
+            await _repository.InserirPedidoAsync(pedido);
+        }
+
+        private bool ProdutoCabeNaCaixa(Dimensao produto, Dimensao caixa)
         {
             return produto.Altura <= caixa.Altura && produto.Largura <= caixa.Largura && produto.Comprimento <= caixa.Comprimento;
         }
     }
-
 }

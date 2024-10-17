@@ -4,42 +4,56 @@ namespace ProductAPI.Model.Context
 {
     public class AppDbContext : DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<Produto> Produtos { get; set; }
-        public DbSet<Dimensoes> Dimensoes { get; set; }
+       public DbSet<Dimensao> Dimensoes { get; set; }
+
         public DbSet<CaixaDisponivel> CaixasDisponiveis { get; set; }
-
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            // Definindo as chaves primárias
-            modelBuilder.Entity<CaixaDisponivel>().HasKey(c => c.CaixaId);
-            modelBuilder.Entity<Dimensoes>().HasKey(d => d.DimensoesId);
-
-            // Configurando o relacionamento entre CaixaDisponivel e Dimensoes
             modelBuilder.Entity<CaixaDisponivel>()
-                .HasOne(c => c.Dimensoes)
-                .WithMany()
-                .HasForeignKey(c => c.DimensoesId);
+         .HasNoKey();
 
-            // Seed Data: Dimensoes
-            modelBuilder.Entity<Dimensoes>().HasData(
-                new Dimensoes { DimensoesId = 1, Altura = 30, Largura = 40, Comprimento = 80 },
-                new Dimensoes { DimensoesId = 2, Altura = 80, Largura = 50, Comprimento = 40 },
-                new Dimensoes { DimensoesId = 3, Altura = 50, Largura = 80, Comprimento = 60 }
-            );
+            // Seed data for Pedidos
+            modelBuilder.Entity<Pedido>()
+                .HasData(
+                    new Pedido { PedidoId = 1 },
+                    new Pedido { PedidoId = 2 },
+                    new Pedido { PedidoId = 3 },
+                    new Pedido { PedidoId = 4 },
+                    new Pedido { PedidoId = 5 },
+                    new Pedido { PedidoId = 6 },
+                    new Pedido { PedidoId = 7 },
+                    new Pedido { PedidoId = 8 },
+                    new Pedido { PedidoId = 9 },
+                    new Pedido { PedidoId = 10 }
+                );
 
-            // Seed Data: CaixaDisponivel com referência correta a DimensoesId
-            modelBuilder.Entity<CaixaDisponivel>().HasData(
-                new CaixaDisponivel { CaixaId = "Caixa 1", DimensoesId = 1 },
-                new CaixaDisponivel { CaixaId = "Caixa 2", DimensoesId = 2 },
-                new CaixaDisponivel { CaixaId = "Caixa 3", DimensoesId = 3 }
-            );
+            // Seed data for Produtos
+            modelBuilder.Entity<Produto>()
+                .HasData(
+                    new Produto { ProdutoId = 1, ProdutoNome = "PS5", PedidoId = 1, DimensaoId = 1 },
+                    new Produto { ProdutoId = 2, ProdutoNome = "Volante", PedidoId = 1, DimensaoId = 2 },
+                    new Produto { ProdutoId = 3, ProdutoNome = "Joystick", PedidoId = 2, DimensaoId = 3 },
+                    new Produto { ProdutoId = 4, ProdutoNome = "Fifa 24", PedidoId = 2, DimensaoId = 2 },
+                    new Produto { ProdutoId = 5, ProdutoNome = "Call of Duty", PedidoId = 2, DimensaoId = 2 },
+                    new Produto { ProdutoId = 6, ProdutoNome = "Headset", PedidoId = 3, DimensaoId = 1 },
+                    new Produto { ProdutoId = 7, ProdutoNome = "Mouse Gamer", PedidoId = 4, DimensaoId = 1 },
+                    new Produto { ProdutoId = 8, ProdutoNome = "Teclado Mecânico", PedidoId = 4, DimensaoId = 1 },
+                    new Produto { ProdutoId = 9, ProdutoNome = "Cadeira Gamer", PedidoId = 5, DimensaoId = 3 },
+                    new Produto { ProdutoId = 10, ProdutoNome = "Webcam", PedidoId = 6, DimensaoId = 1 },
+                    new Produto { ProdutoId = 11, ProdutoNome = "Microfone", PedidoId = 6, DimensaoId = 1 },
+                    new Produto { ProdutoId = 12, ProdutoNome = "Monitor", PedidoId = 6, DimensaoId = 3 },
+                    new Produto { ProdutoId = 13, ProdutoNome = "Notebook", PedidoId = 6, DimensaoId = 1 },
+                    new Produto { ProdutoId = 14, ProdutoNome = "Jogo de Cabos", PedidoId = 7, DimensaoId = 1 },
+                    new Produto { ProdutoId = 15, ProdutoNome = "Controle Xbox", PedidoId = 8, DimensaoId = 1 },
+                    new Produto { ProdutoId = 16, ProdutoNome = "Carregador", PedidoId = 8, DimensaoId = 1 },
+                    new Produto { ProdutoId = 17, ProdutoNome = "Tablet", PedidoId = 9, DimensaoId = 1 },
+                    new Produto { ProdutoId = 18, ProdutoNome = "HD Externo", PedidoId = 10, DimensaoId = 1 },
+                    new Produto { ProdutoId = 19, ProdutoNome = "Pendrive", PedidoId = 10, DimensaoId = 1 }
+                );
         }
 
     }

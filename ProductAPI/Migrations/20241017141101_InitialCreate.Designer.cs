@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProductAPI.Model.Context;
 
@@ -10,9 +11,11 @@ using ProductAPI.Model.Context;
 namespace ProductAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241017141101_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +27,12 @@ namespace ProductAPI.Migrations
             modelBuilder.Entity("ProductAPI.Model.CaixaDisponivel", b =>
                 {
                     b.Property<string>("CaixaId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("DimensaoId")
                         .HasColumnType("int");
+
+                    b.HasKey("CaixaId");
 
                     b.HasIndex("DimensaoId");
 
@@ -55,6 +59,50 @@ namespace ProductAPI.Migrations
                     b.HasKey("DimensaoId");
 
                     b.ToTable("Dimensoes");
+
+                    b.HasData(
+                        new
+                        {
+                            DimensaoId = 1,
+                            Altura = 30f,
+                            Comprimento = 80f,
+                            Largura = 40f
+                        },
+                        new
+                        {
+                            DimensaoId = 2,
+                            Altura = 80f,
+                            Comprimento = 40f,
+                            Largura = 50f
+                        },
+                        new
+                        {
+                            DimensaoId = 3,
+                            Altura = 50f,
+                            Comprimento = 60f,
+                            Largura = 80f
+                        },
+                        new
+                        {
+                            DimensaoId = 4,
+                            Altura = 40f,
+                            Comprimento = 25f,
+                            Largura = 10f
+                        },
+                        new
+                        {
+                            DimensaoId = 5,
+                            Altura = 15f,
+                            Comprimento = 10f,
+                            Largura = 20f
+                        },
+                        new
+                        {
+                            DimensaoId = 6,
+                            Altura = 25f,
+                            Comprimento = 20f,
+                            Largura = 15f
+                        });
                 });
 
             modelBuilder.Entity("ProductAPI.Model.Pedido", b =>
