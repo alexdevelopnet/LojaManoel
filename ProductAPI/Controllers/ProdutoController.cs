@@ -1,25 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProductAPI.Data.ValueObjects;
-using ProductAPI.Repository;
+using ProductAPI.Model;
+using ProductAPI.Service;
 
 namespace ProductAPI.Controllers
 {
-    [Route("api/v1/[controller]")]
     [ApiController]
-    public class ProdutoController : ControllerBase
+    [Route("api/[controller]")]
+    public class PedidosController : ControllerBase
     {
-        private IProductRepository _productRepository;
+        private readonly EmpacotamentoService _empacotamentoService;
 
-        public ProdutoController(IProductRepository productRepository)
+        public PedidosController(EmpacotamentoService empacotamentoService)
         {
-            _productRepository = productRepository;
+            _empacotamentoService = empacotamentoService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProdutoVO>>> FindAll()
+        [HttpPost("processar")]
+        public async Task<IActionResult> ProcessarPedidos([FromBody] PedidosInput pedidosInput)
         {
-            var products = await _productRepository.FindAll();
-            return Ok(products);
+            var resultado = await _empacotamentoService.ProcessarPedidosAsync(pedidosInput);
+            return Ok(resultado);
         }
     }
+
 }
